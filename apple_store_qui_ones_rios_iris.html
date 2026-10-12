@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Store - Catálogo Oficial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandHeader: '#6b21a8',
+                        brandNav: '#c084fc',
+                        brandNavHover: '#a855f7',
+                        brandNavLight: '#f3e8ff',
+                        brandAccent: '#7e22ce'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-btn.active {
+            background-color: #7e22ce;
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c084fc;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a855f7;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800">
+
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <header class="bg-brandHeader text-white shadow-md transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('iphone')">
+                <i class="fa-brands fa-apple text-4xl text-white drop-shadow"></i>
+                <div class="border-l-2 border-purple-400/40 pl-3">
+                    <h1 class="text-3xl font-extrabold tracking-tight text-white">Apple</h1>
+                    <p class="text-xs text-purple-200 tracking-wider">TIENDA OFICIAL</p>
+                </div>
+            </div>
+
+            <!-- Quick Stats / Cart Summary Top Right -->
+            <div class="flex items-center gap-3 bg-purple-900/40 backdrop-blur-md px-4 py-2 rounded-xl border border-purple-400/30 text-sm">
+                <button onclick="navigateTo('carrito')" class="flex items-center gap-2 hover:text-purple-200 transition">
+                    <i class="fa-solid fa-cart-shopping text-purple-300 text-base"></i>
+                    <span>Carrito: <strong id="header-cart-count" class="bg-purple-600 px-2 py-0.5 rounded-full text-xs">0</strong></span>
+                </button>
+                <span class="text-purple-400">|</span>
+                <button onclick="navigateTo('carrito')" class="flex items-center gap-2 hover:text-purple-200 transition">
+                    <i class="fa-solid fa-bookmark text-purple-300 text-base"></i>
+                    <span>Guardados: <strong id="header-saved-count" class="bg-purple-600 px-2 py-0.5 rounded-full text-xs">0</strong></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-brandNav shadow-inner sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4">
+            <div class="flex items-center justify-start sm:justify-center overflow-x-auto py-2.5 gap-1 sm:gap-2 no-scrollbar">
+                <button onclick="navigateTo('iphone')" id="nav-iphone" class="tab-btn active px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-mobile-screen-button"></i> iPhone
+                </button>
+                <button onclick="navigateTo('airpods')" id="nav-airpods" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-headphones"></i> AirPods
+                </button>
+                <button onclick="navigateTo('ipad')" id="nav-ipad" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-tablet-screen-button"></i> iPad
+                </button>
+                <button onclick="navigateTo('macbook')" id="nav-macbook" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-laptop"></i> MacBook
+                </button>
+                <button onclick="navigateTo('cargadores')" id="nav-cargadores" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt"></i> Cargadores
+                </button>
+                <button onclick="navigateTo('contacto')" id="nav-contacto" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-address-card"></i> Contacto / Pago
+                </button>
+                <button onclick="navigateTo('carrito')" id="nav-carrito" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-cart-shopping"></i> Guardados / Carrito
+                </button>
+                <button onclick="navigateTo('perfil')" id="nav-perfil" class="tab-btn px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-purple-950 hover:bg-purple-300/60 transition whitespace-nowrap flex items-center gap-1.5">
+                    <i class="fa-solid fa-user"></i> Perfil
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION: iPhone -->
+        <section id="section-iphone" class="page-section">
+            <div class="mb-6 border-b border-purple-200 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">iPhones Disponibles</h2>
+                    <p class="text-slate-500 text-sm mt-1">Explora la línea más potente con tecnología de vanguardia.</p>
+                </div>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">6 Modelos</span>
+            </div>
+            <div id="grid-iphone" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SECTION: AirPods -->
+        <section id="section-airpods" class="page-section hidden">
+            <div class="mb-6 border-b border-purple-200 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">AirPods Disponibles</h2>
+                    <p class="text-slate-500 text-sm mt-1">Experiencia de sonido inmersivo y cancelación activa de ruido.</p>
+                </div>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">3 Modelos</span>
+            </div>
+            <div id="grid-airpods" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SECTION: iPad -->
+        <section id="section-ipad" class="page-section hidden">
+            <div class="mb-6 border-b border-purple-200 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">iPads Disponibles</h2>
+                    <p class="text-slate-500 text-sm mt-1">Versatilidad, rendimiento y pantalla Liquid Retina incomparable.</p>
+                </div>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">4 Modelos</span>
+            </div>
+            <div id="grid-ipad" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SECTION: MacBook -->
+        <section id="section-macbook" class="page-section hidden">
+            <div class="mb-6 border-b border-purple-200 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">MacBook Disponibles</h2>
+                    <p class="text-slate-500 text-sm mt-1">Potencia extrema con los chips Apple Silicon M3 y M4.</p>
+                </div>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">4 Modelos</span>
+            </div>
+            <div id="grid-macbook" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SECTION: Cargadores -->
+        <section id="section-cargadores" class="page-section hidden">
+            <div class="mb-6 border-b border-purple-200 pb-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Cargadores y Accesorios</h2>
+                    <p class="text-slate-500 text-sm mt-1">Carga rápida y segura diseñada para tus dispositivos Apple.</p>
+                </div>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">4 Accesorios</span>
+            </div>
+            <div id="grid-cargadores" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- SECTION: Contacto / Formulario de Compra -->
+        <section id="section-contacto" class="page-section hidden">
+            <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-purple-100 overflow-hidden">
+                <div class="bg-purple-900 text-white p-6">
+                    <h2 class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-purple-300"></i> Formulario de Finalización de Compra
+                    </h2>
+                    <p class="text-purple-200 text-sm mt-1">Ingresa tus datos de envío e información de pago de forma segura.</p>
+                </div>
+
+                <form id="checkout-form" class="p-6 sm:p-8 space-y-6" onsubmit="handleCheckout(event)">
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-purple-900 border-b pb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-purple-600"></i> Datos del Cliente
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Nombre Completo *</label>
+                                <input type="text" id="cust-name" required placeholder="Ej. Juan Pérez López" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Correo Electrónico *</label>
+                                <input type="email" id="cust-email" required placeholder="ejemplo@correo.com" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Número de Teléfono *</label>
+                                <input type="tel" id="cust-phone" required placeholder="55 1234 5678" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Dirección de Entrega *</label>
+                                <input type="text" id="cust-address" required placeholder="Calle, Número, Colonia, Ciudad" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Métodos de Pago -->
+                    <div class="space-y-4 pt-4 border-t">
+                        <h3 class="text-lg font-semibold text-purple-900 border-b pb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-credit-card text-purple-600"></i> Método de Pago
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer hover:border-purple-400 transition" id="label-pay-card">
+                                <input type="radio" name="paymentMethod" value="card" checked onchange="togglePaymentView()" class="w-4 h-4 text-purple-600 focus:ring-purple-500">
+                                <div>
+                                    <div class="font-semibold text-slate-800 flex items-center gap-2">
+                                        <i class="fa-regular fa-credit-card text-purple-600"></i> Tarjeta de Crédito/Débito
+                                    </div>
+                                    <div class="text-xs text-slate-500">Visa, Mastercard, Amex</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer hover:border-purple-400 transition" id="label-pay-store">
+                                <input type="radio" name="paymentMethod" value="store" onchange="togglePaymentView()" class="w-4 h-4 text-purple-600 focus:ring-purple-500">
+                                <div>
+                                    <div class="font-semibold text-slate-800 flex items-center gap-2">
+                                        <i class="fa-solid fa-store text-purple-600"></i> Tienda de Conveniencia
+                                    </div>
+                                    <div class="text-xs text-slate-500">OXXO, 7-Eleven, Farmacias</div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Panel: Pago con Tarjeta -->
+                        <div id="payment-card-fields" class="bg-purple-50/50 p-5 rounded-xl border border-purple-100 space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Nombre en la Tarjeta</label>
+                                <input type="text" id="card-name" placeholder="Como aparece en la tarjeta" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Número de Tarjeta</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9101 1121" maxlength="19" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 outline-none">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Vencimiento (MM/AA)</label>
+                                    <input type="text" id="card-exp" placeholder="12/28" maxlength="5" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 uppercase mb-1">Código CVV</label>
+                                    <input type="password" id="card-cvv" placeholder="123" maxlength="4" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-purple-500 outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Pago en Tienda (Código de Barras) -->
+                        <div id="payment-store-fields" class="bg-amber-50 p-5 rounded-xl border border-amber-200 text-center space-y-3 hidden">
+                            <p class="text-sm font-medium text-amber-900">Se ha generado un ficha con código de barras único para pagar en tienda:</p>
+                            <div class="bg-white p-4 rounded-lg inline-block shadow-inner border border-slate-200">
+                                <svg id="barcode" class="mx-auto h-20 w-64"></svg>
+                                <p class="text-xs font-mono text-slate-600 mt-1" id="barcode-num">9874-5120-4392-8810</p>
+                            </div>
+                            <p class="text-xs text-amber-700">Presenta este código en cualquier OXXO o 7-Eleven. Tienes 48 horas para realizar tu pago.</p>
+                        </div>
+                    </div>
+
+                    <!-- Total de compra y Botón Submit -->
+                    <div class="pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>
+                            <span class="text-sm text-slate-500">Total a pagar:</span>
+                            <p class="text-2xl font-extrabold text-purple-900" id="checkout-total">$0 MXN</p>
+                        </div>
+                        <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-lg">
+                            <i class="fa-solid fa-lock"></i> Confirmar y Pagar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION: Guardados / Carrito -->
+        <section id="section-carrito" class="page-section hidden">
+            <div class="mb-6 border-b border-purple-200 pb-4">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Tu Carrito y Guardados</h2>
+                <p class="text-slate-500 text-sm mt-1">Administra los artículos que deseas adquirir o comprar más tarde.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Shopping Cart Column (2 Cols) -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center justify-between border-b pb-3">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-cart-shopping text-purple-600"></i> Carrito de Compras</span>
+                            <span id="cart-item-count" class="text-xs bg-purple-100 text-purple-800 px-2.5 py-1 rounded-full font-semibold">0 ítems</span>
+                        </h3>
+                        <div id="cart-items-container" class="divide-y divide-slate-100">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Saved Items / Wishlist Block -->
+                    <div class="bg-purple-50/60 rounded-2xl shadow-sm border border-purple-100 p-6">
+                        <h3 class="text-xl font-bold text-purple-950 mb-4 flex items-center justify-between border-b border-purple-200 pb-3">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-bookmark text-purple-600"></i> Artículos Guardados</span>
+                            <span id="saved-item-count" class="text-xs bg-purple-200 text-purple-900 px-2.5 py-1 rounded-full font-semibold">0 ítems</span>
+                        </h3>
+                        <div id="saved-items-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-md border border-purple-100 p-6 sticky top-20">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 border-b pb-3">Resumen de la Orden</h3>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Subtotal</span>
+                                <span id="summary-subtotal" class="font-semibold text-slate-900">$0 MXN</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Envío</span>
+                                <span class="text-green-600 font-semibold">GRATIS</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Impuestos (IVA 16%)</span>
+                                <span id="summary-tax" class="font-semibold text-slate-900">$0 MXN</span>
+                            </div>
+                            <div class="border-t pt-3 flex justify-between items-center text-base font-bold text-purple-950">
+                                <span>Total final</span>
+                                <span id="summary-total" class="text-xl text-purple-800">$0 MXN</span>
+                            </div>
+                        </div>
+
+                        <button onclick="goToCheckout()" id="btn-proceed-checkout" class="w-full mt-6 py-3 px-4 bg-purple-700 hover:bg-purple-800 text-white font-semibold rounded-xl shadow transition flex items-center justify-center gap-2">
+                            Ir a Pagar / Contacto <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: Perfil del Usuario -->
+        <section id="section-perfil" class="page-section hidden">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- Main Profile Info Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row items-center gap-6 border-b pb-6">
+                        <div class="w-24 h-24 bg-gradient-to-tr from-purple-600 to-indigo-500 rounded-full flex items-center justify-center text-white text-4xl shadow-md">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <div class="text-center sm:text-left flex-grow">
+                            <h2 class="text-2xl font-bold text-slate-900" id="profile-display-name">Usuario Apple</h2>
+                            <p class="text-purple-600 text-sm font-medium">Cliente Preferencial Apple Store</p>
+                            <p class="text-slate-400 text-xs mt-1">Miembro desde 2026</p>
+                        </div>
+                        <button onclick="editProfileModal()" class="px-4 py-2 border border-purple-300 text-purple-700 hover:bg-purple-50 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square"></i> Editar Datos
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 text-sm">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Correo Electrónico</span>
+                            <p class="font-medium text-slate-800 mt-1" id="profile-display-email">cliente@apple.com</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Teléfono</span>
+                            <p class="font-medium text-slate-800 mt-1" id="profile-display-phone">55 9876 5432</p>
+                        </div>
+                        <div class="sm:col-span-2 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Dirección Principal</span>
+                            <p class="font-medium text-slate-800 mt-1" id="profile-display-address">Av. Insurgentes Sur 1234, Ciudad de México</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historial de Compras -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2 border-b pb-3">
+                        <i class="fa-solid fa-clock-rotate-left text-purple-600"></i> Historial de Compras
+                    </h3>
+
+                    <div id="order-history-container" class="space-y-4">
+                        <!-- Dynamically populated or empty state -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-white mt-auto border-t-4 border-brandNav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- Col 1: Brand Info -->
+                <div>
+                    <div class="flex items-center gap-2 text-2xl font-bold mb-3">
+                        <i class="fa-brands fa-apple text-purple-400 text-3xl"></i>
+                        <span class="text-white">Apple</span>
+                    </div>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Los productos más innovadores del mundo, diseñados para empoderar tu vida profesional y personal.
+                    </p>
+                </div>
+
+                <!-- Col 2: Social & Address -->
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-wider text-purple-300 mb-3">Ubicación y Redes</h4>
+                    <p class="text-slate-300 text-sm flex items-start gap-2 mb-4">
+                        <i class="fa-solid fa-location-dot text-purple-400 mt-1"></i>
+                        <span>Av. Principal Apple Tech #123, Cuauhtémoc, CDMX</span>
+                    </p>
+                    <div class="flex gap-4 text-xl">
+                        <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-purple-600 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-purple-600 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-purple-600 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-9 h-9 bg-slate-800 hover:bg-purple-600 rounded-full flex items-center justify-center text-slate-300 hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 3: Student Details Mandatory Field -->
+                <div class="bg-purple-950/60 p-5 rounded-2xl border border-purple-800/50 flex flex-col justify-center">
+                    <span class="text-xs font-semibold text-purple-400 uppercase tracking-widest">Proyecto Escolar</span>
+                    <p class="text-lg font-bold text-white mt-1">Quiñones Rios Iris 5- J</p>
+                    <p class="text-xs text-purple-300 mt-1">Desarrollo Web Integrado • Apple Catalog SPA</p>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
+                &copy; 2026 Apple Inc. Todos los derechos reservados. Desarrollado por Quiñones Rios Iris 5- J.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DATA MODELS
+        const PRODUCTS = {
+            iphone: [
+                {
+                    id: 'ip16pm',
+                    name: 'iPhone 16 Pro Max',
+                    price: 30999,
+                    storage: ['256GB', '512GB', '1TB'],
+                    colors: [
+                        { name: 'Titanio Desierto', hex: '#c5b49e' },
+                        { name: 'Titanio Natural', hex: '#9d9890' },
+                        { name: 'Titanio Blanco', hex: '#f2f1ed' },
+                        { name: 'Titanio Negro', hex: '#323233' }
+                    ],
+                    camera: 'Sistema de cámaras Pro de 48 MP (Fusión, Ultra gran angular y Teleobjetivo 5x) con Photonic Engine.',
+                    img: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ip16p',
+                    name: 'iPhone 16 Pro',
+                    price: 25999,
+                    storage: ['128GB', '256GB', '512GB', '1TB'],
+                    colors: [
+                        { name: 'Titanio Natural', hex: '#9d9890' },
+                        { name: 'Titanio Desierto', hex: '#c5b49e' },
+                        { name: 'Titanio Negro', hex: '#323233' }
+                    ],
+                    camera: 'Cámara Fusión de 48 MP con control de cámara táctil avanzado y grabación Dolby Vision 4K a 120 fps.',
+                    img: 'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ip16',
+                    name: 'iPhone 16',
+                    price: 19999,
+                    storage: ['128GB', '256GB', '512GB'],
+                    colors: [
+                        { name: 'Ultramar', hex: '#4361ee' },
+                        { name: 'Teal', hex: '#2ec4b6' },
+                        { name: 'Rosa', hex: '#ffb703' },
+                        { name: 'Blanco', hex: '#ffffff' }
+                    ],
+                    camera: 'Sistema avanzado de dos cámaras: 48 MP Fusión con teleobjetivo 2x y Ultra Gran Angular de 12 MP.',
+                    img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ip15',
+                    name: 'iPhone 15',
+                    price: 16999,
+                    storage: ['128GB', '256GB', '512GB'],
+                    colors: [
+                        { name: 'Rosa', hex: '#f8bbd0' },
+                        { name: 'Verde', hex: '#c8e6c9' },
+                        { name: 'Negro', hex: '#212121' }
+                    ],
+                    camera: 'Cámara principal de 48 MP con autoenfoque rápido y fotos de súper alta resolución (24 MP y 48 MP).',
+                    img: 'https://images.unsplash.com/photo-1565849904461-04a58ad377e0?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ip14',
+                    name: 'iPhone 14',
+                    price: 14499,
+                    storage: ['128GB', '256GB'],
+                    colors: [
+                        { name: 'Azul', hex: '#90caf9' },
+                        { name: 'Púrpura', hex: '#d1c4e9' },
+                        { name: 'Medianoche', hex: '#1a237e' }
+                    ],
+                    camera: 'Cámara doble de 12 MP con modo Acción para videos estables e integración de modo Noche mejorado.',
+                    img: 'https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ipse',
+                    name: 'iPhone SE (3ª gen)',
+                    price: 10499,
+                    storage: ['64GB', '128GB', '256GB'],
+                    colors: [
+                        { name: 'Medianoche', hex: '#111827' },
+                        { name: 'Blanco Estelar', hex: '#f9fafb' },
+                        { name: 'Rojo (PRODUCT)RED', hex: '#dc2626' }
+                    ],
+                    camera: 'Cámara Gran Angular de 12 MP con Smart HDR 4, Estilos Fotográficos y Deep Fusion.',
+                    img: 'https://images.unsplash.com/photo-1530319067432-f2a729c03db5?auto=format&fit=crop&w=600&q=80'
+                }
+            ],
+            airpods: [
+                {
+                    id: 'ap-pro2',
+                    name: 'AirPods Pro 2',
+                    price: 5499,
+                    desc: 'Cancelación Activa de Ruido de nivel superior, Audio Espacial personalizado y estuche de carga MagSafe USB-C.',
+                    img: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ap-4',
+                    name: 'AirPods 4',
+                    price: 2999,
+                    desc: 'Diseño rediseñado para ajuste perfecto todo el día, chip H2 con aislamiento de voz y hasta 30h de batería.',
+                    img: 'https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ap-max',
+                    name: 'AirPods Max',
+                    price: 12999,
+                    desc: 'Diseño supraaural con diadema de malla tejida, ecualización adaptativa, chip H1 en cada auricular y audio de alta fidelidad.',
+                    colors: [
+                        { name: 'Plata', hex: '#e5e7eb' },
+                        { name: 'Azul Cielo', hex: '#7dd3fc' },
+                        { name: 'Verde', hex: '#86efac' },
+                        { name: 'Rosa', hex: '#f472b6' },
+                        { name: 'Negro Espacial', hex: '#374151' }
+                    ],
+                    img: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=600&q=80'
+                }
+            ],
+            ipad: [
+                {
+                    id: 'ipad-prom4',
+                    name: 'iPad Pro M4',
+                    price: 24999,
+                    storage: ['256GB', '512GB', '1TB', '2TB'],
+                    colors: [
+                        { name: 'Plata', hex: '#e2e8f0' },
+                        { name: 'Negro Espacial', hex: '#1e293b' }
+                    ],
+                    desc: 'Increíblemente delgado con pantalla Ultra Retina XDR OLED en tándem y la potencia arrolladora del chip M4.',
+                    img: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ipad-airm2',
+                    name: 'iPad Air M2',
+                    price: 14999,
+                    storage: ['128GB', '256GB', '512GB'],
+                    colors: [
+                        { name: 'Azul', hex: '#bae6fd' },
+                        { name: 'Púrpura', hex: '#e9d5ff' },
+                        { name: 'Blanco Estelar', hex: '#f8fafc' }
+                    ],
+                    desc: 'Disponible en 11 y 13 pulgadas, impulsado por el chip Apple M2. Compatible con Apple Pencil Pro.',
+                    img: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ipad-10',
+                    name: 'iPad (10ª generación)',
+                    price: 8999,
+                    storage: ['64GB', '256GB'],
+                    colors: [
+                        { name: 'Azul', hex: '#38bdf8' },
+                        { name: 'Rosa', hex: '#fb7185' },
+                        { name: 'Amarillo', hex: '#facc15' },
+                        { name: 'Plata', hex: '#e2e8f0' }
+                    ],
+                    desc: 'Diseño con pantalla Liquid Retina de 10.9 pulgadas, chip A14 Bionic y puerto USB-C versátil.',
+                    img: 'https://images.unsplash.com/photo-1585792180666-f7347c490ee2?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'ipad-mini',
+                    name: 'iPad mini',
+                    price: 11999,
+                    storage: ['128GB', '256GB', '512GB'],
+                    colors: [
+                        { name: 'Gris Espacial', hex: '#475569' },
+                        { name: 'Lila', hex: '#ddd6fe' }
+                    ],
+                    desc: 'Rendimiento ultraportátil en 8.3 pulgadas con chip A17 Pro y soporte para Apple Intelligence.',
+                    img: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=600&q=80'
+                }
+            ],
+            macbook: [
+                {
+                    id: 'mbp-16',
+                    name: 'MacBook Pro 16"',
+                    price: 54999,
+                    storage: ['512GB / 18GB RAM', '1TB / 36GB RAM', '2TB / 48GB RAM'],
+                    colors: [
+                        { name: 'Negro Espacial', hex: '#0f172a' },
+                        { name: 'Plata', hex: '#e2e8f0' }
+                    ],
+                    img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'mbp-14',
+                    name: 'MacBook Pro 14"',
+                    price: 39999,
+                    storage: ['512GB / 16GB RAM', '1TB / 24GB RAM'],
+                    colors: [
+                        { name: 'Negro Espacial', hex: '#0f172a' },
+                        { name: 'Plata', hex: '#e2e8f0' }
+                    ],
+                    img: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'mba-15',
+                    name: 'MacBook Air M3 15"',
+                    price: 29999,
+                    storage: ['256GB / 8GB RAM', '512GB / 16GB RAM'],
+                    colors: [
+                        { name: 'Medianoche', hex: '#1e1b4b' },
+                        { name: 'Blanco Estelar', hex: '#fef3c7' },
+                        { name: 'Gris Espacial', hex: '#334155' }
+                    ],
+                    img: 'https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'mba-13',
+                    name: 'MacBook Air M3 13"',
+                    price: 22999,
+                    storage: ['256GB / 8GB RAM', '512GB / 16GB RAM'],
+                    colors: [
+                        { name: 'Medianoche', hex: '#1e1b4b' },
+                        { name: 'Plata', hex: '#f1f5f9' },
+                        { name: 'Gris Espacial', hex: '#334155' }
+                    ],
+                    img: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=600&q=80'
+                }
+            ],
+            cargadores: [
+                {
+                    id: 'charg-20w',
+                    name: 'Adaptador de corriente USB-C de 20 W',
+                    price: 549,
+                    compatible: 'iPhone (8 en adelante), iPad Air, iPad Pro, AirPods Pro',
+                    img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'charg-magsafe',
+                    name: 'Cargador MagSafe',
+                    price: 999,
+                    compatible: 'iPhone 12, 13, 14, 15, 16 y estuches de AirPods MagSafe',
+                    img: 'https://images.unsplash.com/photo-1622445268121-da11d0991cc5?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'charg-35w-dual',
+                    name: 'Adaptador de corriente dual USB-C de 35 W',
+                    price: 1399,
+                    compatible: 'MacBook Air, iPhone, iPad y Apple Watch simultáneamente',
+                    img: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?auto=format&fit=crop&w=600&q=80'
+                },
+                {
+                    id: 'charg-ms3-cable',
+                    name: 'Cable USB-C a MagSafe 3 (2 m)',
+                    price: 1299,
+                    compatible: 'MacBook Pro 14" y 16" (M1/M2/M3/M4) y MacBook Air M2/M3',
+                    img: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=600&q=80'
+                }
+            ]
+        };
+
+        // GLOBAL APP STATE
+        let appState = {
+            cart: [],
+            saved: [],
+            user: {
+                name: 'Iris Quiñones Rios',
+                email: 'iris.quinones@apple.com',
+                phone: '656 123 4567',
+                address: 'Av. Tecnológico #4500, Ciudad Juárez, Chih.'
+            },
+            orders: []
+        };
+
+        // HELPER: Currency Formatter
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(amount);
+        }
+
+        function renderProducts() {
+            // Render iPhones
+            const iphoneGrid = document.getElementById('grid-iphone');
+            iphoneGrid.innerHTML = PRODUCTS.iphone.map(item => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-xl bg-slate-100 mb-4 h-56 flex items-center justify-center p-4">
+                            <img src="${item.img}" alt="${item.name}" class="h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/f3e8ff/6b21a8?text=${encodeURIComponent(item.name)}'">
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900">${item.name}</h3>
+                        <p class="text-2xl font-extrabold text-purple-700 mt-1">${formatMoney(item.price)}</p>
+                        
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Capacidades</span>
+                            <div class="flex flex-wrap gap-1.5 mt-1">
+                                ${item.storage.map(s => `<span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border font-medium">${s}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Colores</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                ${item.colors.map(c => `<span class="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style="background-color: ${c.hex}" title="${c.name}"></span>`).join('')}
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 mt-3 line-clamp-3 bg-purple-50/50 p-2.5 rounded-lg border border-purple-100">
+                            <strong>Cámara:</strong> ${item.camera}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5 pt-3 border-t">
+                        <button onclick="addToCart('${item.id}', 'iphone')" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                        <button onclick="addToSaved('${item.id}', 'iphone')" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-bookmark"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render AirPods
+            const airpodsGrid = document.getElementById('grid-airpods');
+            airpodsGrid.innerHTML = PRODUCTS.airpods.map(item => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-xl bg-slate-100 mb-4 h-56 flex items-center justify-center p-4">
+                            <img src="${item.img}" alt="${item.name}" class="h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/f3e8ff/6b21a8?text=${encodeURIComponent(item.name)}'">
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900">${item.name}</h3>
+                        <p class="text-2xl font-extrabold text-purple-700 mt-1">${formatMoney(item.price)}</p>
+
+                        ${item.colors ? `
+                            <div class="mt-3">
+                                <span class="text-xs font-semibold text-slate-400 uppercase">Colores Disponibles</span>
+                                <div class="flex items-center gap-2 mt-1">
+                                    ${item.colors.map(c => `<span class="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style="background-color: ${c.hex}" title="${c.name}"></span>`).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <p class="text-xs text-slate-600 mt-3 p-2.5 bg-slate-50 rounded-lg border">
+                            ${item.desc}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5 pt-3 border-t">
+                        <button onclick="addToCart('${item.id}', 'airpods')" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                        <button onclick="addToSaved('${item.id}', 'airpods')" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-bookmark"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render iPad
+            const ipadGrid = document.getElementById('grid-ipad');
+            ipadGrid.innerHTML = PRODUCTS.ipad.map(item => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-xl bg-slate-100 mb-4 h-56 flex items-center justify-center p-4">
+                            <img src="${item.img}" alt="${item.name}" class="h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/f3e8ff/6b21a8?text=${encodeURIComponent(item.name)}'">
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900">${item.name}</h3>
+                        <p class="text-2xl font-extrabold text-purple-700 mt-1">${formatMoney(item.price)}</p>
+
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Almacenamiento</span>
+                            <div class="flex flex-wrap gap-1.5 mt-1">
+                                ${item.storage.map(s => `<span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border font-medium">${s}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Colores</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                ${item.colors.map(c => `<span class="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style="background-color: ${c.hex}" title="${c.name}"></span>`).join('')}
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 mt-3 p-2.5 bg-slate-50 rounded-lg border">
+                            ${item.desc}
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5 pt-3 border-t">
+                        <button onclick="addToCart('${item.id}', 'ipad')" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                        <button onclick="addToSaved('${item.id}', 'ipad')" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-bookmark"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render MacBook
+            const macbookGrid = document.getElementById('grid-macbook');
+            macbookGrid.innerHTML = PRODUCTS.macbook.map(item => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-xl bg-slate-100 mb-4 h-56 flex items-center justify-center p-4">
+                            <img src="${item.img}" alt="${item.name}" class="h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/f3e8ff/6b21a8?text=${encodeURIComponent(item.name)}'">
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900">${item.name}</h3>
+                        <p class="text-2xl font-extrabold text-purple-700 mt-1">${formatMoney(item.price)}</p>
+
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Configuraciones GB / RAM</span>
+                            <div class="flex flex-wrap gap-1.5 mt-1">
+                                ${item.storage.map(s => `<span class="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md border font-medium">${s}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold text-slate-400 uppercase">Acabados</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                ${item.colors.map(c => `<span class="w-4 h-4 rounded-full border border-slate-300 shadow-sm" style="background-color: ${c.hex}" title="${c.name}"></span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5 pt-3 border-t">
+                        <button onclick="addToCart('${item.id}', 'macbook')" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                        <button onclick="addToSaved('${item.id}', 'macbook')" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-bookmark"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Render Cargadores
+            const cargadoresGrid = document.getElementById('grid-cargadores');
+            cargadoresGrid.innerHTML = PRODUCTS.cargadores.map(item => `
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl transition flex flex-col justify-between group">
+                    <div>
+                        <div class="overflow-hidden rounded-xl bg-slate-100 mb-4 h-56 flex items-center justify-center p-4">
+                            <img src="${item.img}" alt="${item.name}" class="h-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/400x300/f3e8ff/6b21a8?text=${encodeURIComponent(item.name)}'">
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900">${item.name}</h3>
+                        <p class="text-2xl font-extrabold text-purple-700 mt-1">${formatMoney(item.price)}</p>
+
+                        <div class="mt-4 p-3 bg-purple-50 rounded-xl border border-purple-100 text-xs">
+                            <span class="font-bold text-purple-900 block mb-1 flex items-center gap-1">
+                                <i class="fa-solid fa-circle-check text-purple-600"></i> Compatibilidad Oficial:
+                            </span>
+                            <p class="text-slate-600">${item.compatible}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-5 pt-3 border-t">
+                        <button onclick="addToCart('${item.id}', 'cargadores')" class="py-2.5 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow">
+                            <i class="fa-solid fa-cart-plus"></i> Comprar
+                        </button>
+                        <button onclick="addToSaved('${item.id}', 'cargadores')" class="py-2.5 px-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+                            <i class="fa-regular fa-bookmark"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function findProductById(id, category) {
+            return PRODUCTS[category].find(p => p.id === id);
+        }
+
+        function addToCart(id, category) {
+            const product = findProductById(id, category);
+            if (!product) return;
+
+            const existing = appState.cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                appState.cart.push({ ...product, qty: 1, category });
+            }
+            updateCartAndSavedUI();
+            showToast(`"${product.name}" agregado al carrito`, 'success');
+        }
+
+        function addToSaved(id, category) {
+            const product = findProductById(id, category);
+            if (!product) return;
+
+            const existing = appState.saved.find(item => item.id === id);
+            if (!existing) {
+                appState.saved.push({ ...product, category });
+                showToast(`"${product.name}" guardado en tu lista`, 'info');
+            } else {
+                showToast(`"${product.name}" ya está en tus guardados`, 'warning');
+            }
+            updateCartAndSavedUI();
+        }
+
+        function removeFromCart(id) {
+            appState.cart = appState.cart.filter(item => item.id !== id);
+            updateCartAndSavedUI();
+            showToast('Artículo eliminado del carrito', 'info');
+        }
+
+        function removeFromSaved(id) {
+            appState.saved = appState.saved.filter(item => item.id !== id);
+            updateCartAndSavedUI();
+            showToast('Artículo quitado de guardados', 'info');
+        }
+
+        function changeCartQty(id, delta) {
+            const item = appState.cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    removeFromCart(id);
+                } else {
+                    updateCartAndSavedUI();
+                }
+            }
+        }
+
+        function moveToCartFromSaved(id) {
+            const savedItem = appState.saved.find(i => i.id === id);
+            if (savedItem) {
+                addToCart(id, savedItem.category);
+                removeFromSaved(id);
+            }
+        }
+
+        function updateCartAndSavedUI() {
+            // Update counts in top header
+            const totalCartItems = appState.cart.reduce((sum, i) => sum + i.qty, 0);
+            document.getElementById('header-cart-count').innerText = totalCartItems;
+            document.getElementById('header-saved-count').innerText = appState.saved.length;
+
+            document.getElementById('cart-item-count').innerText = `${totalCartItems} ítems`;
+            document.getElementById('saved-item-count').innerText = `${appState.saved.length} ítems`;
+
+            // Render Cart list inside Cart section
+            const cartContainer = document.getElementById('cart-items-container');
+            if (appState.cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="py-10 text-center text-slate-400">
+                        <i class="fa-solid fa-cart-arrow-down text-4xl mb-2 text-slate-300"></i>
+                        <p class="text-sm">Tu carrito está vacío actualmente.</p>
+                    </div>
+                `;
+            } else {
+                cartContainer.innerHTML = appState.cart.map(item => `
+                    <div class="py-4 flex items-center justify-between gap-4">
+                        <img src="${item.img}" class="w-16 h-16 object-contain rounded-lg bg-slate-50 p-1 border" onerror="this.src='https://placehold.co/100x100?text=Apple'">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-slate-900 text-sm sm:text-base">${item.name}</h4>
+                            <p class="text-xs text-purple-700 font-semibold">${formatMoney(item.price)} c/u</p>
+                        </div>
+                        <div class="flex items-center gap-2 border rounded-lg p-1 bg-slate-50">
+                            <button onclick="changeCartQty('${item.id}', -1)" class="w-7 h-7 bg-white rounded border hover:bg-slate-100 flex items-center justify-center text-xs font-bold">-</button>
+                            <span class="text-sm font-semibold w-6 text-center">${item.qty}</span>
+                            <button onclick="changeCartQty('${item.id}', 1)" class="w-7 h-7 bg-white rounded border hover:bg-slate-100 flex items-center justify-center text-xs font-bold">+</button>
+                        </div>
+                        <div class="text-right">
+                            <p class="font-bold text-slate-900 text-sm sm:text-base">${formatMoney(item.price * item.qty)}</p>
+                            <button onclick="removeFromCart('${item.id}')" class="text-xs text-red-500 hover:text-red-700 mt-1 flex items-center gap-1 ml-auto">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Saved List
+            const savedContainer = document.getElementById('saved-items-container');
+            if (appState.saved.length === 0) {
+                savedContainer.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-slate-400">
+                        <i class="fa-regular fa-bookmark text-3xl mb-1 text-slate-300"></i>
+                        <p class="text-xs">No tienes artículos guardados para después.</p>
+                    </div>
+                `;
+            } else {
+                savedContainer.innerHTML = appState.saved.map(item => `
+                    <div class="bg-white p-3 rounded-xl border border-purple-100 shadow-sm flex items-center gap-3">
+                        <img src="${item.img}" class="w-14 h-14 object-contain rounded-lg bg-slate-50 p-1 border" onerror="this.src='https://placehold.co/100x100?text=Apple'">
+                        <div class="flex-grow min-w-0">
+                            <h5 class="font-semibold text-slate-900 text-xs truncate">${item.name}</h5>
+                            <p class="text-xs text-purple-700 font-bold">${formatMoney(item.price)}</p>
+                            <div class="flex gap-2 mt-2">
+                                <button onclick="moveToCartFromSaved('${item.id}')" class="text-[10px] bg-purple-700 hover:bg-purple-800 text-white px-2 py-1 rounded font-bold">
+                                    Mover a Carrito
+                                </button>
+                                <button onclick="removeFromSaved('${item.id}')" class="text-[10px] text-slate-400 hover:text-red-500">
+                                    Quitar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Financial Summary Calculation
+            const subtotal = appState.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const tax = Math.round(subtotal * 0.16);
+            const total = subtotal; // Price includes VAT in retail MX standard
+
+            document.getElementById('summary-subtotal').innerText = formatMoney(subtotal);
+            document.getElementById('summary-tax').innerText = formatMoney(tax);
+            document.getElementById('summary-total').innerText = formatMoney(total);
+            document.getElementById('checkout-total').innerText = formatMoney(total);
+        }
+
+        function navigateTo(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.add('hidden'));
+
+            // Show selected
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update tab styles
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const activeTab = document.getElementById(`nav-${sectionId}`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToCheckout() {
+            if (appState.cart.length === 0) {
+                showToast('Agrega productos al carrito antes de proceder al pago.', 'warning');
+                return;
+            }
+            navigateTo('contacto');
+        }
+
+        function togglePaymentView() {
+            const isCard = document.querySelector('input[name="paymentMethod"]:checked').value === 'card';
+            const cardFields = document.getElementById('payment-card-fields');
+            const storeFields = document.getElementById('payment-store-fields');
+
+            if (isCard) {
+                cardFields.classList.remove('hidden');
+                storeFields.classList.add('hidden');
+            } else {
+                cardFields.classList.add('hidden');
+                storeFields.classList.remove('hidden');
+                generateBarcodeSVG();
+            }
+        }
+
+        function generateBarcodeSVG() {
+            const svg = document.getElementById('barcode');
+            svg.innerHTML = ''; // Clear existing
+            
+            // Generate simulated lines for SVG barcode
+            const width = 240;
+            const height = 60;
+            let x = 10;
+            
+            for (let i = 0; i < 35; i++) {
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                const lineWidth = (Math.random() > 0.5) ? 4 : 2;
+                rect.setAttribute('x', x);
+                rect.setAttribute('y', 5);
+                rect.setAttribute('width', lineWidth);
+                rect.setAttribute('height', height);
+                rect.setAttribute('fill', '#1e293b');
+                svg.appendChild(rect);
+                x += lineWidth + (Math.random() > 0.4 ? 3 : 2);
+            }
+        }
+
+        function handleCheckout(event) {
+            event.preventDefault();
+
+            if (appState.cart.length === 0) {
+                showToast('No hay artículos en el carrito para comprar.', 'error');
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value;
+            const email = document.getElementById('cust-email').value;
+            const phone = document.getElementById('cust-phone').value;
+            const address = document.getElementById('cust-address').value;
+            const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            const total = appState.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            // Record Order
+            const newOrder = {
+                id: 'APP-' + Math.floor(100000 + Math.random() * 900000),
+                date: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                items: [...appState.cart],
+                total: total,
+                method: method === 'card' ? 'Tarjeta de Crédito/Débito' : 'Tienda de Conveniencia (OXXO/7-Eleven)',
+                shippingAddress: address
+            };
+
+            appState.orders.unshift(newOrder);
+
+            // Update User Profile details
+            appState.user = { name, email, phone, address };
+            updateProfileUI();
+
+            // Clear Cart
+            appState.cart = [];
+            updateCartAndSavedUI();
+
+            // Reset Form
+            document.getElementById('checkout-form').reset();
+
+            // Redirect & Notify
+            showToast('¡Compra realizada con éxito! Revisa tu perfil para ver el historial.', 'success');
+            navigateTo('perfil');
+        }
+
+        function updateProfileUI() {
+            document.getElementById('profile-display-name').innerText = appState.user.name || 'Usuario Apple';
+            document.getElementById('profile-display-email').innerText = appState.user.email || 'No registrado';
+            document.getElementById('profile-display-phone').innerText = appState.user.phone || 'No registrado';
+            document.getElementById('profile-display-address').innerText = appState.user.address || 'No registrada';
+
+            // Auto-fill checkout fields
+            document.getElementById('cust-name').value = appState.user.name;
+            document.getElementById('cust-email').value = appState.user.email;
+            document.getElementById('cust-phone').value = appState.user.phone;
+            document.getElementById('cust-address').value = appState.user.address;
+
+            // Render Orders
+            const container = document.getElementById('order-history-container');
+            if (appState.orders.length === 0) {
+                container.innerHTML = `
+                    <div class="py-8 text-center text-slate-400">
+                        <i class="fa-solid fa-box-open text-4xl mb-2 text-slate-300"></i>
+                        <p class="text-sm">Aún no has realizado ninguna compra en esta sesión.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = appState.orders.map(order => `
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3">
+                        <div class="flex flex-wrap justify-between items-center text-xs text-slate-500 border-b pb-2 gap-2">
+                            <span class="font-mono font-bold text-purple-900 text-sm">Folio: ${order.id}</span>
+                            <span>Fecha: ${order.date}</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-semibold">${order.method}</span>
+                        </div>
+                        <div class="space-y-2">
+                            ${order.items.map(i => `
+                                <div class="flex justify-between items-center text-sm">
+                                    <span class="text-slate-800 font-medium">${i.qty}x ${i.name}</span>
+                                    <span class="text-slate-600 font-mono">${formatMoney(i.price * i.qty)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="border-t pt-2 flex justify-between items-center">
+                            <span class="text-xs text-slate-500">Enviar a: ${order.shippingAddress}</span>
+                            <span class="font-bold text-slate-900 text-base">Total: ${formatMoney(order.total)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function editProfileModal() {
+            const newName = prompt('Ingresa tu nombre completo:', appState.user.name);
+            if (newName !== null) appState.user.name = newName;
+
+            const newEmail = prompt('Ingresa tu correo electrónico:', appState.user.email);
+            if (newEmail !== null) appState.user.email = newEmail;
+
+            const newPhone = prompt('Ingresa tu teléfono:', appState.user.phone);
+            if (newPhone !== null) appState.user.phone = newPhone;
+
+            const newAddr = prompt('Ingresa tu dirección de entrega:', appState.user.address);
+            if (newAddr !== null) appState.user.address = newAddr;
+
+            updateProfileUI();
+            showToast('Datos de usuario actualizados correctamente', 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            let icon = 'fa-circle-info';
+            let bg = 'bg-slate-900';
+
+            if (type === 'success') {
+                icon = 'fa-circle-check';
+                bg = 'bg-purple-800';
+            } else if (type === 'warning') {
+                icon = 'fa-triangle-exclamation';
+                bg = 'bg-amber-700';
+            } else if (type === 'error') {
+                icon = 'fa-circle-xmark';
+                bg = 'bg-red-700';
+            }
+
+            toast.className = `${bg} text-white text-sm px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 transition duration-300 transform translate-y-2 pointer-events-auto border border-white/20 max-w-sm`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i><span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // INITIALIZATION ON LOAD
+        window.onload = function() {
+            renderProducts();
+            updateCartAndSavedUI();
+            updateProfileUI();
+            togglePaymentView();
+        };
+    </script>
+</body>
+</html>
